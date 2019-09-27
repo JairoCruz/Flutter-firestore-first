@@ -81,6 +81,7 @@ Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
 
   return Dismissible(
     key: Key(record.name),
+    direction: DismissDirection.endToStart,
     onDismissed: (direction) {
       Firestore.instance
           .collection("baby")
