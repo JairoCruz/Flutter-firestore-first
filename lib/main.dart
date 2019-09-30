@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_flutter_firestore/add.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -109,6 +110,7 @@ Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
         child: ListTile(
           title: Text(record.name),
           trailing: Text(record.votes.toString()),
+          subtitle: Text(new DateFormat("d MMMM yyyy").format(record.dates)),
           onTap: () => record.reference.updateData({'votes': record.votes + 1}),
           /* *no work for me **onTap: () => Firestore.instance.runTransaction((transaction) async {
                final freshSnapshot = await transaction.get(record.reference);
@@ -126,13 +128,16 @@ Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
 class Record {
   final String name;
   final int votes;
+  final DateTime dates;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['name'] != null),
         assert(map['votes'] != null),
+        assert(map['date'] != null),
         name = map['name'],
-        votes = map['votes'];
+        votes = map['votes'],
+        dates = map['date'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
