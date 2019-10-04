@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_flutter_firestore/add.dart';
 import 'package:flutter/material.dart';
-//import 'package:grouped_listview/grouped_listview.dart';
+import 'package:grouped_listview/grouped_listview.dart';
 import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
@@ -73,21 +73,21 @@ Widget _buildBody(BuildContext context) {
 }
 
 Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-  return ListView(
+  /*return ListView(
     padding: const EdgeInsets.only(top: 20.0),
     children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-  );
+  );*/
 
-  /* Este codigo me permite crear una coleccion de Registros para pasarlos al widget GrouptListView
+   //Este codigo me permite crear una coleccion de Registros para pasarlos al widget GrouptListView
   var listaRecord = List<Record>();
   snapshot.forEach((data) {
     final record = Record.fromSnapshot(data);
     listaRecord.add(record);
   });
 
- */
+ 
 
-  /* return GroupedListView<Record, String>(
+  return GroupedListView<Record, String>(
     collection: listaRecord,
     groupBy: (Record r) => DateFormat("d-MMMM-yyyy").format(r.dates),
     //listBuilder: (BuildContext context, Record r) => ListTile(title: Text(r.name.toString()),),
@@ -138,8 +138,42 @@ Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
         ),
       );
     },
-    groupBuilder: (BuildContext context, String name) => Text(name),
-  );  */
+    groupBuilder: (BuildContext context, String name) => _stickerHeader(context, name),
+    //groupBuilder: (BuildContext context, String name) => Padding(padding: EdgeInsets.symmetric(horizontal: 15.0,vertical: 0.0),child:Text(name,style: TextStyle(color: Colors.red),)),
+  );  
+}
+
+Widget _stickerHeader(BuildContext context, String name) {
+  //return Text(name);
+  return Stack(
+    children: <Widget>[
+      Padding(
+        padding: EdgeInsets.only(left: 25.0, top: 25.0,bottom: 25.0),
+        child: Text(name),
+      ),
+      new Positioned(
+        top: 10.0,
+        left: 5.0,
+        child: new Container(
+          height: 20.0,
+          width: 20.0,
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.red
+          ),
+          child: new Container(
+            margin: new EdgeInsets.all(4.0),
+            height: 25.0,
+            width: 25.0,
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.green,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
 }
 
 Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
