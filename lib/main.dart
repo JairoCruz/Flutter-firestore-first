@@ -78,70 +78,84 @@ Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     children: snapshot.map((data) => _buildListItem(context, data)).toList(),
   );*/
 
-   //Este codigo me permite crear una coleccion de Registros para pasarlos al widget GrouptListView
+  //Este codigo me permite crear una coleccion de Registros para pasarlos al widget GrouptListView
   var listaRecord = List<Record>();
   snapshot.forEach((data) {
     final record = Record.fromSnapshot(data);
     listaRecord.add(record);
   });
 
- 
-
   return GroupedListView<Record, String>(
     collection: listaRecord,
     groupBy: (Record r) => DateFormat("d-MMMM-yyyy").format(r.dates),
     //listBuilder: (BuildContext context, Record r) => ListTile(title: Text(r.name.toString()),),
     listBuilder: (BuildContext context, Record record) {
-      return Dismissible(
-        key: Key(record.name),
-        direction: DismissDirection.endToStart,
-        onDismissed: (direction) {
-          Firestore.instance
-              .collection("baby")
-              .document(record.name.toUpperCase())
-              .delete();
-          print(record.name);
-        },
-        background: Container(
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.only(right: 20.0),
-          color: Colors.red,
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-        ),
-        child: Padding(
-          key: ValueKey(record.name),
-          //padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
-          padding: const EdgeInsets.only(left: 28.0, bottom: 8.0, right: 16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(5.0),
+      return Stack(
+        children: <Widget>[
+          Dismissible(
+            key: Key(record.name),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) {
+              Firestore.instance
+                  .collection("baby")
+                  .document(record.name.toUpperCase())
+                  .delete();
+              print(record.name);
+            },
+            background: Container(
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.only(right: 20.0),
+              color: Colors.red,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
             ),
-            child: ListTile(
-              title: Text(record.name),
-              trailing: Text(record.votes.toString()),
-              subtitle:
-                  Text(new DateFormat("d MMMM yyyy").format(record.dates)),
-              onTap: () =>
-                  record.reference.updateData({'votes': record.votes + 1}),
-              /* *no work for me **onTap: () => Firestore.instance.runTransaction((transaction) async {
+            child: Padding(
+              key: ValueKey(record.name),
+              //padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.only(left: 28.0, bottom: 8.0, right: 16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: ListTile(
+                  title: Text(record.name),
+                  trailing: Text(record.votes.toString()),
+                  subtitle:
+                      Text(new DateFormat("d MMMM yyyy").format(record.dates)),
+                  onTap: () =>
+                      record.reference.updateData({'votes': record.votes + 1}),
+                  /* *no work for me **onTap: () => Firestore.instance.runTransaction((transaction) async {
                final freshSnapshot = await transaction.get(record.reference);
                final fresh = Record.fromSnapshot(freshSnapshot);
 
                await transaction
                    .update(record.reference, {'votes': fresh.votes + 1});
              }),*/
+                ),
+              ),
             ),
           ),
-        ),
+          Positioned(
+            top: 0.0,
+            bottom: 0.0,
+            left: 16.0,
+            child: Container(
+              height: double.infinity,
+              width: 1.0,
+              color: Colors.blue,
+            ),
+          )
+        ],
       );
     },
-    groupBuilder: (BuildContext context, String name) => _stickerHeader(context, name),
+    groupBuilder: (BuildContext context, String name) =>
+        _stickerHeader(context, name),
     //groupBuilder: (BuildContext context, String name) => Padding(padding: EdgeInsets.symmetric(horizontal: 15.0,vertical: 0.0),child:Text(name,style: TextStyle(color: Colors.red),)),
-  );  
+  );
 }
 
 Widget _stickerHeader(BuildContext context, String name) {
@@ -149,7 +163,7 @@ Widget _stickerHeader(BuildContext context, String name) {
   return Stack(
     children: <Widget>[
       Padding(
-        padding: EdgeInsets.only(left: 30.0, top: 12.0,bottom: 16.0),
+        padding: EdgeInsets.only(left: 30.0, top: 12.0, bottom: 16.0),
         child: Text(name),
       ),
       new Positioned(
@@ -158,17 +172,15 @@ Widget _stickerHeader(BuildContext context, String name) {
         child: new Container(
           height: 20.0,
           width: 20.0,
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.red
-          ),
+          decoration:
+              new BoxDecoration(shape: BoxShape.circle, color: Colors.white),
           child: new Container(
             margin: new EdgeInsets.all(4.0),
             height: 25.0,
             width: 25.0,
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.green,
+              color: Colors.blue,
             ),
           ),
         ),
