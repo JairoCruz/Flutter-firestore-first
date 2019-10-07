@@ -113,7 +113,8 @@ Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
         ),
         child: Padding(
           key: ValueKey(record.name),
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          //padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+          padding: const EdgeInsets.only(left: 28.0, bottom: 8.0, right: 16.0),
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
@@ -148,7 +149,7 @@ Widget _stickerHeader(BuildContext context, String name) {
   return Stack(
     children: <Widget>[
       Padding(
-        padding: EdgeInsets.only(left: 25.0, top: 25.0,bottom: 25.0),
+        padding: EdgeInsets.only(left: 30.0, top: 12.0,bottom: 16.0),
         child: Text(name),
       ),
       new Positioned(
