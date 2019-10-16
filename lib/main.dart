@@ -33,14 +33,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+     appBar: AppBar(
         title: Text('Baby Name Votes'),
       ),
+      //appBar: _customScrollView(),
       body: _buildBody(context),
+     // body: _customScrollView(context),
       floatingActionButton: _buildFloatingButton(context),
     );
   }
 }
+
+/*Widget _customScrollView(BuildContext context) {
+  return NestedScrollView(
+    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled){
+      return <Widget>[
+        SliverAppBar(
+          expandedHeight: 200.0,
+          floating: false,
+          pinned: true,
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: true,
+            title: Text("hello"),
+          ),
+        ),
+      ];
+    },
+    body: _buildBody(context),
+  );
+}*/
 
 Widget _buildFloatingButton(BuildContext context) {
   return FloatingActionButton(
